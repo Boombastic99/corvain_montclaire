@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="P8cZdBPbOjjZkzVQavMdOpsEcxRiaI_vsMNV4qWhdUU" />
+<meta name="description" content="Corvain Montclaire — Elite website design, business management and financial strategy. Build beyond limits.">
+<title>CORVAIN MONTCLAIRE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<style>
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   DESIGN TOKENS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+:root {
+  --ink:    #060608;
+  --deep:   #0A0A0E;
+  --panel:  #111118;
+  --surface:#16161F;
+  --raise:  #1C1C27;
+  --snow:   #F0EDE8;
+  --mist:   #8C8894;
+  --fog:    #3A3845;
+  --red:    #C41E1E;
+  --red-hi: #D63030;
+  --red-gl: rgba(196,30,30,.32);
+  --red-xs: rgba(196,30,30,.07);
+  --gold:   #B8872A;
+  --gold-gl:rgba(184,135,42,.18);
+  --glass:  rgba(16,16,24,.58);
+  --g-edge: rgba(255,255,255,.07);
+  --g-top:  rgba(255,255,255,.13);
+  --border: rgba(255,255,255,.055);
+  --bd2:    rgba(255,255,255,.1);
+  --ease:   cubic-bezier(.77,0,.175,1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{background:var(--ink);color:var(--snow);font-family:'Cormorant Garamond',serif;overflow-x:hidden;cursor:none}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   GRAIN TEXTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#grain{position:fixed;inset:0;pointer-events:none;z-index:9990;opacity:.45;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23g)' opacity='.065'/%3E%3C/svg%3E")}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   CURSOR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#dot{position:fixed;width:6px;height:6px;background:var(--snow);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .25s;mix-blend-mode:difference}
+#ring{position:fixed;width:32px;height:32px;border:1px solid rgba(255,255,255,.2);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .38s,height .38s,border-color .3s,opacity .3s}
+body.hov #dot{width:11px;height:11px;background:var(--red);mix-blend-mode:normal}
+body.hov #ring{width:48px;height:48px;border-color:rgba(196,30,30,.5);opacity:.7}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   LOADER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#loader{position:fixed;inset:0;background:var(--ink);z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;transition:opacity .9s ease,visibility .9s}
+#loader.gone{opacity:0;visibility:hidden;pointer-events:none}
+.ld-mark{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.8rem,6vw,5.5rem);letter-spacing:.5em;color:var(--snow);display:flex;overflow:hidden}
+.ld-mark span{display:inline-block;opacity:0;transform:translateY(105%);animation:liftChar .8s var(--ease) forwards}
+.ld-sub{font-family:'DM Mono',monospace;font-size:.45rem;letter-spacing:.38em;text-transform:uppercase;color:var(--fog);margin-top:1.6rem;opacity:0;transition:opacity .5s ease 2s}
+#loader.active .ld-sub{opacity:1}
+.ld-prog{width:0;height:1px;background:linear-gradient(90deg,transparent,var(--red),transparent);margin-top:2rem;transition:width 1.6s var(--ease)}
+@keyframes liftChar{to{opacity:1;transform:translateY(0)}}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   GLASS SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.gl{background:var(--glass);border:1px solid var(--g-edge);backdrop-filter:blur(36px) saturate(1.9) brightness(1.07);-webkit-backdrop-filter:blur(36px) saturate(1.9) brightness(1.07);position:relative;overflow:hidden}
+.gl::before{content:'';position:absolute;inset:0;background:linear-gradient(145deg,rgba(255,255,255,.055) 0%,transparent 45%,rgba(255,255,255,.018) 100%);pointer-events:none;z-index:0}
+.gl::after{content:'';position:absolute;top:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--g-top),transparent);pointer-events:none;z-index:1}
+.gl>*{position:relative;z-index:2}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   NAV
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:1.3rem clamp(1.5rem,5vw,5rem);border-bottom:1px solid transparent;transition:background .55s,border-color .55s,backdrop-filter .55s}
+nav.on{background:rgba(6,6,8,.78);backdrop-filter:blur(30px) saturate(1.5);-webkit-backdrop-filter:blur(30px) saturate(1.5);border-color:var(--border)}
+.n-logo{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.32em;color:var(--snow);text-decoration:none;display:flex;align-items:center;gap:.7rem;flex-shrink:0}
+.n-logo svg{width:24px;height:24px;fill:currentColor}
+.n-links{display:flex;gap:2.5rem;list-style:none}
+.n-links a{font-family:'DM Mono',monospace;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:var(--fog);text-decoration:none;transition:color .3s;position:relative;padding-bottom:3px}
+.n-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1px;background:var(--red);transition:width .3s}
+.n-links a:hover{color:var(--snow)}
+.n-links a:hover::after{width:100%}
+.n-btn{font-family:'DM Mono',monospace;font-size:.5rem;letter-spacing:.18em;text-transform:uppercase;background:var(--red);color:var(--snow);border:none;padding:.6rem 1.5rem;cursor:none;transition:background .3s,box-shadow .3s;position:relative;overflow:hidden}
+.n-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.12),transparent);pointer-events:none}
+.n-btn:hover{background:var(--red-hi);box-shadow:0 4px 22px var(--red-gl)}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   HERO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#hero{min-height:100vh;position:relative;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;border-bottom:1px solid var(--border)}
+.h-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:90px 90px;mask-image:radial-gradient(ellipse 85% 85% at 35% 55%,black 25%,transparent 100%);pointer-events:none}
+.h-vline{position:absolute;top:0;bottom:0;left:40%;width:1px;background:linear-gradient(180deg,transparent 0%,rgba(255,255,255,.035) 20%,rgba(255,255,255,.035) 80%,transparent 100%);pointer-events:none}
+.h-scan{position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--red),transparent);opacity:0;animation:scanLine 7s ease-in-out infinite;pointer-events:none}
+@keyframes scanLine{0%{top:-1px;opacity:0}5%{opacity:.8}88%{opacity:.2}100%{top:100%;opacity:0}}
+.h-orb1{position:absolute;width:900px;height:900px;top:-350px;left:-300px;border-radius:50%;background:radial-gradient(circle,var(--red-gl) 0%,transparent 65%);filter:blur(100px);pointer-events:none;animation:breathe 9s ease-in-out infinite}
+.h-orb2{position:absolute;width:600px;height:600px;bottom:-200px;right:-200px;border-radius:50%;background:radial-gradient(circle,rgba(184,135,42,.18) 0%,transparent 65%);filter:blur(80px);pointer-events:none;animation:breathe 12s ease-in-out infinite reverse}
+@keyframes breathe{0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.08) rotate(3deg)}}
+.h-content{position:relative;z-index:2;padding:clamp(9rem,18vw,15rem) clamp(1.5rem,7vw,7rem) clamp(3rem,5vw,5rem)}
+.h-eyebrow{font-family:'DM Mono',monospace;font-size:.55rem;letter-spacing:.32em;text-transform:uppercase;color:var(--red);margin-bottom:2.2rem;display:flex;align-items:center;gap:.9rem;opacity:0;animation:fadeUp .75s ease .3s forwards}
+.h-eyebrow::before{content:'';width:20px;height:1px;background:var(--red)}
+.h-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(5.5rem,18vw,20rem);line-height:.85;color:var(--snow)}
+.h-line{display:block;overflow:hidden}
+.h-line em{display:inline-block;font-style:normal;opacity:0;transform:translateY(110%);animation:liftChar .95s var(--ease) forwards}
+.h-line:nth-child(1) em{animation-delay:.22s}
+.h-line:nth-child(2) em{animation-delay:.4s;-webkit-text-stroke:1.5px rgba(255,255,255,.16);color:transparent}
+.h-line:nth-child(3) em{animation-delay:.58s;color:var(--red)}
+.h-desc{max-width:44ch;font-size:clamp(1rem,1.6vw,1.2rem);font-weight:300;line-height:1.82;color:var(--mist);margin-top:2.5rem;opacity:0;animation:fadeUp .75s ease .95s forwards}
+.h-ctas{display:flex;gap:.9rem;margin-top:2.5rem;flex-wrap:wrap;opacity:0;animation:fadeUp .75s ease 1.15s forwards}
+.btn-p{font-family:'DM Mono',monospace;font-size:.55rem;letter-spacing:.16em;text-transform:uppercase;background:var(--red);color:var(--snow);border:none;padding:.92rem 2.3rem;cursor:none;transition:background .3s,box-shadow .3s,transform .2s;position:relative;overflow:hidden}
+.btn-p::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.1),transparent);pointer-events:none}
+.btn-p:hover{background:var(--red-hi);box-shadow:0 8px 30px var(--red-gl);transform:translateY(-1px)}
+.btn-s{font-family:'DM Mono',monospace;font-size:.55rem;letter-spacing:.16em;text-transform:uppercase;background:transparent;color:var(--snow);border:1px solid var(--bd2);padding:.92rem 2.3rem;cursor:none;backdrop-filter:blur(16px);transition:background .3s,border-color .3s;position:relative;overflow:hidden}
+.btn-s::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);pointer-events:none}
+.btn-s:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.22)}
+.h-stats{display:flex;flex-wrap:wrap;margin-top:4.5rem;padding-top:2rem;border-top:1px solid var(--border);gap:0}
+.h-stat{flex:1;min-width:110px;padding-right:2.5rem;margin-right:2.5rem;border-right:1px solid var(--border)}
+.h-stat:last-child{border-right:none;margin-right:0;padding-right:0}
+.h-stat .sn{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;color:var(--snow);display:block;line-height:1}
+.h-stat .sl{font-family:'DM Mono',monospace;font-size:.46rem;letter-spacing:.2em;text-transform:uppercase;color:var(--fog);display:block;margin-top:.3rem}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   TICKER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.ticker-wrap{overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:rgba(255,255,255,.01);padding:.72rem 0}
+.ticker-inner{display:flex;width:max-content;animation:tick 28s linear infinite}
+.ticker-inner:hover{animation-play-state:paused}
+.ticker-inner span{font-family:'DM Mono',monospace;font-size:.5rem;letter-spacing:.26em;text-transform:uppercase;color:var(--fog);white-space:nowrap;padding:0 2rem}
+.ticker-inner span.acc{color:var(--red)}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SECTION BASE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+section{padding:clamp(5rem,10vw,11rem) clamp(1.5rem,7vw,7rem);position:relative}
+.s-eyebrow{font-family:'DM Mono',monospace;font-size:.5rem;letter-spacing:.3em;text-transform:uppercase;color:var(--red);margin-bottom:1.2rem;display:flex;align-items:center;gap:.8rem}
+.s-eyebrow::before{content:'';width:18px;height:1px;background:var(--red)}
+.s-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,6.5vw,6.2rem);line-height:.9;letter-spacing:.015em;color:var(--snow)}
+.s-title em{font-style:normal;color:var(--red)}
+.s-title .ghost{-webkit-text-stroke:1px rgba(255,255,255,.15);color:transparent}
+.divider{border:none;height:1px;background:linear-gradient(90deg,transparent,var(--border) 30%,var(--border) 70%,transparent);margin:0}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   REVEAL ANIMATIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+[data-r]{opacity:0;transition:opacity .8s ease,transform .8s ease}
+[data-r="up"]{transform:translateY(38px)}
+[data-r="left"]{transform:translateX(-38px)}
+[data-r="right"]{transform:translateX(38px)}
+[data-r="scale"]{transform:scale(.96)}
+[data-r].in{opacity:1;transform:none}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   ABOUT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#about{display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:start;border-bottom:1px solid var(--border)}
+.about-q{font-family:'Playfair Display',serif;font-size:clamp(1.2rem,2.5vw,1.85rem);font-style:italic;font-weight:400;line-height:1.6;color:rgba(240,237,232,.58);max-width:36ch}
+.about-q strong{color:var(--snow);font-style:normal}
+.about-q .red{color:var(--red);font-style:italic}
+.about-pill{display:flex;align-items:stretch;gap:0;margin-top:2.5rem;border-left:2px solid var(--red)}
+.about-pill p{font-family:'DM Mono',monospace;font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mist);line-height:1.8;padding:.9rem 1.2rem;background:var(--red-xs)}
+.about-pts{display:flex;flex-direction:column}
+.about-pt{display:grid;grid-template-columns:2.8rem 1fr;gap:1rem;padding:1.7rem 0;border-bottom:1px solid var(--border);transition:padding-left .3s}
+.about-pt:last-child{border-bottom:none}
+.about-pt:hover{padding-left:.6rem}
+.pt-n{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;color:var(--red);padding-top:.1rem}
+.pt-b h3{font-size:1.05rem;font-weight:600;color:var(--snow);margin-bottom:.3rem}
+.pt-b p{font-size:.86rem;line-height:1.76;color:var(--fog)}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   BENEFITS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#benefits{border-bottom:1px solid var(--border)}
+.ben-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:1px;margin-top:4rem;background:var(--border)}
+.ben-card{padding:2.4rem;background:var(--deep);position:relative;overflow:hidden;transition:background .35s}
+.ben-card::before{content:'';position:absolute;left:0;top:0;width:2px;height:0;background:linear-gradient(180deg,var(--red),transparent);transition:height .5s ease}
+.ben-card:hover::before{height:100%}
+.ben-card:hover{background:var(--panel)}
+.ben-card:hover .b-ico{opacity:1;transform:scale(1.1) translateY(-2px)}
+.b-ico{font-size:1.45rem;margin-bottom:1.2rem;display:block;opacity:.72;transition:opacity .3s,transform .3s}
+.ben-card h3{font-size:1.08rem;font-weight:600;color:var(--snow);margin-bottom:.45rem}
+.ben-card p{font-size:.83rem;line-height:1.74;color:var(--fog)}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   CHART
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#chart{border-bottom:1px solid var(--border)}
+.chart-body{display:grid;grid-template-columns:1fr 1fr;gap:6rem;margin-top:4rem;align-items:end}
+.chart-bars{display:flex;gap:1.1rem;align-items:flex-end;height:260px;position:relative}
+.chart-baseline{position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--bd2),transparent)}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:.5rem}
+.bar-pct{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;color:var(--snow)}
+.bar-track{width:100%;height:220px;background:rgba(255,255,255,.02);position:relative;overflow:hidden}
+.bar-fill{position:absolute;bottom:0;left:0;right:0;height:0;transition:height 1.5s var(--ease)}
+.bf1{background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,.07))}
+.bf2{background:linear-gradient(180deg,var(--red-hi),rgba(196,30,30,.3))}
+.bf3{background:linear-gradient(180deg,var(--red),rgba(196,30,30,.5));box-shadow:0 -6px 25px var(--red-gl)}
+.bf4{background:linear-gradient(180deg,#fff,rgba(255,255,255,.4));box-shadow:0 -6px 25px rgba(255,255,255,.12)}
+.bf5{background:linear-gradient(180deg,var(--gold),rgba(184,135,42,.3));opacity:.72}
+.bar-lbl{font-family:'DM Mono',monospace;font-size:.42rem;letter-spacing:.07em;text-transform:uppercase;color:var(--fog);text-align:center;line-height:1.7}
+.chart-legend{display:flex;flex-direction:column;gap:1.2rem}
+.leg-row{display:flex;align-items:center;gap:.9rem}
+.leg-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.leg-info .leg-name{font-family:'DM Mono',monospace;font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;color:var(--snow);margin-bottom:.15rem}
+.leg-info .leg-sub{font-size:.8rem;color:var(--fog)}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   PLANS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#plans{border-bottom:1px solid var(--border)}
+.plans-wrap{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;margin-top:4rem;background:var(--border);border:1px solid var(--border)}
+.plan{background:var(--deep);padding:2rem 1.6rem;position:relative;display:flex;flex-direction:column;transition:background .35s}
+.plan:hover{background:var(--panel)}
+.plan.hot{background:var(--surface);z-index:2}
+.plan.hot::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--red),transparent)}
+.plan.hot::after{content:'';position:absolute;inset:0;box-shadow:inset 0 0 0 1px rgba(196,30,30,.28);pointer-events:none}
+.plan.soon{background:rgba(184,135,42,.025);z-index:2}
+.plan.soon::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.plan.soon::after{content:'';position:absolute;inset:0;box-shadow:inset 0 0 0 1px rgba(184,135,42,.18);pointer-events:none}
+.p-badge{font-family:'DM Mono',monospace;font-size:.42rem;letter-spacing:.18em;text-transform:uppercase;padding:.2rem .65rem;display:inline-block;margin-bottom:.8rem;width:fit-content}
+.p-badge.hot{background:var(--red);color:#fff}
+.p-badge.cs{background:var(--gold-gl);color:var(--gold);border:1px solid rgba(184,135,42,.3)}
+.p-name{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.07em;color:var(--snow);margin-bottom:.3rem}
+.p-tag{font-size:.8rem;font-style:italic;color:var(--fog);line-height:1.55;margin-bottom:1.2rem;flex-shrink:0}
+.p-price{padding:1rem 0;margin-bottom:1.2rem;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.p-sym{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--mist);vertical-align:top;margin-top:.4rem;display:inline-block}
+.p-num{font-family:'Bebas Neue',sans-serif;font-size:2.6rem;line-height:1;color:var(--snow)}
+.p-note{font-family:'DM Mono',monospace;font-size:.43rem;letter-spacing:.1em;text-transform:uppercase;color:var(--fog);display:block;margin-top:.2rem}
+.p-feats{list-style:none;display:flex;flex-direction:column;gap:.5rem;flex:1}
+.p-feats li{font-size:.79rem;line-height:1.5;color:var(--mist);display:flex;gap:.55rem;align-items:flex-start}
+.p-feats li::before{content:'—';color:var(--red);flex-shrink:0}
+.plan.soon .p-feats li::before{color:var(--gold)}
+.p-cta{width:100%;padding:.7rem;margin-top:1.4rem;cursor:none;font-family:'DM Mono',monospace;font-size:.46rem;letter-spacing:.16em;text-transform:uppercase;border:1px solid var(--border);background:rgba(255,255,255,.025);color:var(--snow);transition:background .3s,border-color .3s,box-shadow .3s;position:relative;overflow:hidden}
+.p-cta::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent)}
+.p-cta:hover{background:rgba(255,255,255,.065);border-color:var(--bd2)}
+.plan.hot .p-cta{background:var(--red);border-color:var(--red)}
+.plan.hot .p-cta:hover{background:var(--red-hi);box-shadow:0 4px 20px var(--red-gl)}
+.plan.soon .p-cta{background:var(--gold-gl);border-color:rgba(184,135,42,.28);color:var(--gold);cursor:default}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   PAYMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#payment{border-bottom:1px solid var(--border)}
+.pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:4rem}
+.pay-card{padding:3rem 2.5rem;transition:transform .3s,box-shadow .3s}
+.pay-card:hover{transform:translateY(-3px)}
+.pay-card.avail{box-shadow:inset 0 0 0 1px rgba(196,30,30,.25)}
+.pay-card.avail::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--red),transparent)}
+.pay-card.soon2{box-shadow:inset 0 0 0 1px rgba(184,135,42,.18)}
+.pay-card.soon2::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.pay-ico{font-size:2.1rem;margin-bottom:1.4rem;display:block}
+.pay-card h3{font-family:'Bebas Neue',sans-serif;font-size:1.65rem;letter-spacing:.06em;color:var(--snow);margin-bottom:.55rem}
+.pay-card p{font-size:.88rem;line-height:1.75;color:var(--fog);max-width:32ch}
+.pay-tag{display:inline-flex;align-items:center;gap:.5rem;font-family:'DM Mono',monospace;font-size:.46rem;letter-spacing:.14em;text-transform:uppercase;margin-top:1.6rem;padding:.38rem .9rem;border:1px solid}
+.pay-tag.live{color:#4ade80;border-color:rgba(74,222,128,.3);background:rgba(74,222,128,.04)}
+.pay-tag.coming{color:var(--gold);border-color:rgba(184,135,42,.3);background:rgba(184,135,42,.04)}
+.pay-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 1.7s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   CATEGORIES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#categories{border-bottom:1px solid var(--border)}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1px;margin-top:3.5rem;background:var(--border)}
+.cat-item{padding:1.65rem 1.4rem;background:var(--deep);cursor:none;transition:background .25s;display:flex;flex-direction:column;gap:.52rem;position:relative;overflow:hidden}
+.cat-item::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--red-xs),transparent);transform:scaleX(0);transform-origin:left;transition:transform .35s}
+.cat-item:hover::after{transform:scaleX(1)}
+.cat-item:hover{background:var(--surface)}
+.cat-item:hover .c-ico{opacity:1;transform:scale(1.1)}
+.c-ico{font-size:1.4rem;opacity:.68;transition:opacity .3s,transform .3s}
+.cat-item h4{font-size:.96rem;font-weight:600;color:var(--snow)}
+.cat-item p{font-size:.73rem;color:var(--fog);line-height:1.5}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   REQUEST FORM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#request{border-bottom:1px solid var(--border)}
+.form-layout{display:grid;grid-template-columns:1fr 1.4fr;gap:5rem;margin-top:4rem}
+.form-info h3{font-family:'Playfair Display',serif;font-size:clamp(1.2rem,2.3vw,1.75rem);font-style:italic;font-weight:400;color:var(--snow);line-height:1.55;margin-bottom:1.2rem}
+.form-info p{font-size:.87rem;line-height:1.82;color:var(--fog)}
+.f-box{margin-top:1.4rem;padding:1.3rem;border-left:2px solid var(--red);background:var(--red-xs)}
+.f-box .f-lbl{font-family:'DM Mono',monospace;font-size:.44rem;letter-spacing:.22em;text-transform:uppercase;color:var(--fog);display:block;margin-bottom:.35rem}
+.f-box .f-val{font-size:.88rem;color:var(--snow)}
+.f-box .f-val a{color:var(--red);text-decoration:none}
+.f-box .f-val a:hover{text-decoration:underline}
+.form-wrap{padding:2.5rem;display:flex;flex-direction:column;gap:1rem}
+.field{display:flex;flex-direction:column;gap:.35rem}
+.field label{font-family:'DM Mono',monospace;font-size:.44rem;letter-spacing:.22em;text-transform:uppercase;color:var(--fog)}
+.req-star{color:var(--red)}
+.field input,.field select,.field textarea{background:rgba(255,255,255,.028);border:1px solid var(--border);border-bottom-color:rgba(255,255,255,.1);color:var(--snow);padding:.82rem 1rem;font-family:'Cormorant Garamond',serif;font-size:1rem;outline:none;width:100%;transition:border-color .25s,background .25s,box-shadow .25s;cursor:none;-webkit-appearance:none;appearance:none}
+.field input::placeholder,.field textarea::placeholder{color:var(--fog)}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--red);background:var(--red-xs);box-shadow:0 4px 18px rgba(196,30,30,.07)}
+.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7'%3E%3Cpath d='M.5.5l5 5 5-5' stroke='%233A3845' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:calc(100% - .9rem) center;padding-right:2.4rem}
+.field select option{background:var(--panel);color:var(--snow)}
+.field textarea{resize:vertical;min-height:90px;line-height:1.65}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.field .err{font-family:'DM Mono',monospace;font-size:.42rem;letter-spacing:.1em;text-transform:uppercase;color:var(--red);display:none;margin-top:.2rem}
+.field.bad .err{display:block}
+.field.bad input,.field.bad select,.field.bad textarea{border-color:var(--red)!important;box-shadow:0 0 0 1px rgba(196,30,30,.25)}
+.submit-btn{background:var(--red);color:var(--snow);border:none;padding:1.05rem;cursor:none;font-family:'DM Mono',monospace;font-size:.52rem;letter-spacing:.22em;text-transform:uppercase;transition:background .3s,transform .2s,box-shadow .3s;width:100%;position:relative;overflow:hidden}
+.submit-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.1),transparent);pointer-events:none}
+.submit-btn:hover{background:var(--red-hi);transform:translateY(-1px);box-shadow:0 8px 28px var(--red-gl)}
+.submit-btn:active{transform:translateY(0)}
+.form-note{font-size:.78rem;color:var(--fog);font-style:italic;text-align:center}
+.form-note a{color:var(--red);text-decoration:none}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   REVIEWS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#reviews{border-bottom:1px solid var(--border)}
+.rev-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1px;margin-top:4rem;background:var(--border)}
+.rev{padding:2.4rem;background:var(--deep);position:relative;overflow:hidden;transition:background .3s}
+.rev:hover{background:var(--panel)}
+.rev::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--red-xs),transparent)}
+.rev-stars{color:var(--red);letter-spacing:.12rem;font-size:.85rem;margin-bottom:1rem}
+.rev-q{font-family:'Playfair Display',serif;font-size:.97rem;font-style:italic;line-height:1.8;color:rgba(240,237,232,.58);margin-bottom:1.4rem}
+.rev-auth{display:flex;align-items:center;gap:.85rem}
+.rev-av{width:34px;height:34px;border-radius:50%;background:rgba(196,30,30,.1);border:1px solid rgba(196,30,30,.22);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:.78rem;color:var(--red);flex-shrink:0}
+.rev-name{font-family:'DM Mono',monospace;font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:var(--snow)}
+.rev-role{font-size:.76rem;color:var(--fog);margin-top:.1rem}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SAMPLE CTA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#sample{text-align:center;overflow:hidden;border-bottom:1px solid var(--border)}
+.sample-orb{position:absolute;width:700px;height:450px;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;filter:blur(110px);background:radial-gradient(circle,rgba(196,30,30,.18) 0%,transparent 70%);pointer-events:none}
+.sample-inner{position:relative;z-index:1;max-width:620px;margin:0 auto}
+.sample-q{font-family:'Playfair Display',serif;font-size:clamp(1.1rem,2.4vw,1.8rem);font-style:italic;line-height:1.65;color:rgba(240,237,232,.52);margin-bottom:2.5rem}
+.sample-link{display:inline-flex;align-items:center;gap:.8rem;font-family:'DM Mono',monospace;font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--snow);text-decoration:none;padding:.95rem 2.5rem;border:1px solid var(--bd2);backdrop-filter:blur(16px);transition:background .3s,border-color .3s,box-shadow .3s;position:relative;overflow:hidden}
+.sample-link::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);pointer-events:none}
+.sample-link:hover{background:var(--red);border-color:var(--red);box-shadow:0 8px 30px var(--red-gl)}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   FOUNDERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#founders{text-align:center;overflow:hidden;border-bottom:1px solid var(--border)}
+.fd-orb{position:absolute;width:500px;height:280px;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;filter:blur(80px);background:radial-gradient(circle,rgba(196,30,30,.1) 0%,transparent 70%);pointer-events:none}
+.fd-inner{position:relative;z-index:1;max-width:700px;margin:0 auto}
+.fd-eyebrow{font-family:'DM Mono',monospace;font-size:.5rem;letter-spacing:.32em;text-transform:uppercase;color:var(--fog);margin-bottom:3rem;display:block}
+.fd-duo{display:flex;justify-content:center;align-items:center;gap:5rem;flex-wrap:wrap}
+.fd-person .fd-role{font-family:'DM Mono',monospace;font-size:.44rem;letter-spacing:.24em;text-transform:uppercase;color:var(--red);margin-bottom:.7rem;display:block}
+.fd-person .fd-name{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,3.3rem);font-style:italic;color:var(--snow);line-height:1}
+.fd-person .fd-name b{font-style:normal;font-weight:900}
+.fd-sep{width:1px;height:75px;background:var(--border);flex-shrink:0}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   FOOTER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+footer{background:var(--deep);padding:4rem clamp(1.5rem,7vw,7rem) 2.5rem;border-top:1px solid var(--border)}
+.ft-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:3.5rem;padding-bottom:3rem;border-bottom:1px solid var(--border)}
+.ft-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.28em;color:var(--snow);display:flex;align-items:center;gap:.6rem;margin-bottom:.8rem}
+.ft-logo svg{width:20px;height:20px;fill:currentColor}
+.ft-brand-desc{font-size:.82rem;color:var(--fog);line-height:1.72;max-width:24ch}
+.ft-col h4{font-family:'DM Mono',monospace;font-size:.46rem;letter-spacing:.22em;text-transform:uppercase;color:var(--red);margin-bottom:1rem}
+.ft-col ul{list-style:none;display:flex;flex-direction:column;gap:.5rem}
+.ft-col ul a{font-size:.82rem;color:var(--fog);text-decoration:none;transition:color .25s,padding-left .25s;display:block;position:relative}
+.ft-col ul a:hover{color:var(--snow);padding-left:.6rem}
+.ft-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:1.8rem;flex-wrap:wrap;gap:1rem}
+.ft-copy{font-family:'DM Mono',monospace;font-size:.44rem;letter-spacing:.15em;text-transform:uppercase;color:var(--fog)}
+.ft-cred{font-family:'Cormorant Garamond',serif;font-size:.87rem;font-style:italic;color:var(--fog)}
+.ft-cred strong{color:var(--red)}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   TOAST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(130%);z-index:9997;background:var(--surface);border:1px solid var(--border);border-top:2px solid var(--red);padding:1.3rem 1.8rem;min-width:300px;max-width:460px;backdrop-filter:blur(28px);display:flex;align-items:center;gap:1rem;transition:transform .55s cubic-bezier(.34,1.56,.64,1),opacity .4s;opacity:0;box-shadow:0 16px 48px rgba(0,0,0,.6)}
+#toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.t-ico{font-size:1.3rem;flex-shrink:0}
+.t-txt h4{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.06em;color:var(--snow);margin-bottom:.15rem}
+.t-txt p{font-size:.78rem;color:var(--fog);line-height:1.5}
+.t-close{margin-left:auto;background:none;border:none;color:var(--fog);cursor:none;font-size:1rem;transition:color .2s;flex-shrink:0;padding:.2rem}
+.t-close:hover{color:var(--snow)}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   CHATBOT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* Floating button */
+#chat-fab{
+  position:fixed;bottom:2.2rem;right:2.2rem;z-index:2000;
+  width:58px;height:58px;border-radius:50%;
+  background:var(--red);border:none;cursor:none;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 32px var(--red-gl),0 0 0 0 var(--red-gl);
+  transition:transform .3s,box-shadow .3s;
+  animation:fabPulse 3s ease infinite;
+}
+#chat-fab:hover{transform:scale(1.08);box-shadow:0 12px 40px var(--red-gl)}
+#chat-fab svg{width:24px;height:24px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .3s}
+#chat-fab.open svg{transform:rotate(45deg)}
+@keyframes fabPulse{0%,100%{box-shadow:0 8px 32px var(--red-gl),0 0 0 0 rgba(196,30,30,.4)}50%{box-shadow:0 8px 32px var(--red-gl),0 0 0 12px rgba(196,30,30,0)}}
+.fab-tooltip{position:absolute;right:calc(100% + .8rem);top:50%;transform:translateY(-50%);background:var(--surface);border:1px solid var(--border);padding:.35rem .8rem;font-family:'DM Mono',monospace;font-size:.42rem;letter-spacing:.15em;text-transform:uppercase;color:var(--snow);white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .25s}
+#chat-fab:hover .fab-tooltip{opacity:1}
+
+/* Chat panel */
+#chat-panel{
+  position:fixed;bottom:5.8rem;right:2.2rem;z-index:2001;
+  width:min(390px,calc(100vw - 2rem));
+  max-height:calc(100vh - 8rem);
+  display:flex;flex-direction:column;
+  opacity:0;pointer-events:none;
+  transform:translateY(20px) scale(.97);
+  transition:opacity .38s ease,transform .38s var(--ease);
+  border:1px solid var(--g-edge);
+  box-shadow:0 24px 60px rgba(0,0,0,.7),0 0 0 1px rgba(196,30,30,.08);
+  overflow:hidden;
+  background:var(--glass);
+  backdrop-filter:blur(40px) saturate(2);
+  -webkit-backdrop-filter:blur(40px) saturate(2);
+}
+#chat-panel::before{content:'';position:absolute;top:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--g-top),transparent);z-index:3;pointer-events:none}
+#chat-panel.open{opacity:1;pointer-events:all;transform:translateY(0) scale(1)}
+
+/* Chat header */
+.chat-head{
+  display:flex;align-items:center;gap:.9rem;
+  padding:1.2rem 1.4rem;
+  border-bottom:1px solid var(--border);
+  background:rgba(0,0,0,.25);
+  position:relative;z-index:2;
+  flex-shrink:0;
+}
+.chat-head::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--g-top),transparent)}
+.chat-av{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,var(--red),rgba(196,30,30,.6));
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;position:relative;
+}
+.chat-av::after{content:'';position:absolute;bottom:1px;right:1px;width:8px;height:8px;border-radius:50%;background:#4ade80;border:1.5px solid var(--surface)}
+.chat-av svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round}
+.chat-head-info .chat-name{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:.08em;color:var(--snow);display:block;line-height:1}
+.chat-head-info .chat-status{font-family:'DM Mono',monospace;font-size:.42rem;letter-spacing:.14em;text-transform:uppercase;color:#4ade80;display:flex;align-items:center;gap:.4rem;margin-top:.25rem}
+.chat-head-info .chat-status::before{content:'';width:5px;height:5px;border-radius:50%;background:#4ade80;animation:blink 2s ease infinite}
+.chat-close-btn{margin-left:auto;background:none;border:none;color:var(--fog);cursor:none;padding:.3rem;transition:color .2s}
+.chat-close-btn:hover{color:var(--snow)}
+.chat-close-btn svg{width:16px;height:16px;stroke:currentColor;stroke-width:1.8;fill:none}
+
+/* Chat messages */
+.chat-messages{
+  flex:1;overflow-y:auto;padding:1.2rem;
+  display:flex;flex-direction:column;gap:.75rem;
+  scroll-behavior:smooth;min-height:260px;max-height:360px;
+}
+.chat-messages::-webkit-scrollbar{width:3px}
+.chat-messages::-webkit-scrollbar-track{background:transparent}
+.chat-messages::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.msg{display:flex;flex-direction:column;gap:.2rem;max-width:88%;animation:msgIn .3s ease forwards}
+.msg.bot{align-self:flex-start}
+.msg.user{align-self:flex-end}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.msg-bubble{padding:.72rem 1rem;line-height:1.6;font-size:.88rem}
+.msg.bot .msg-bubble{background:rgba(255,255,255,.055);border:1px solid var(--g-edge);color:var(--snow);border-radius:0 12px 12px 12px}
+.msg.bot .msg-bubble::before{content:'';position:absolute;top:0;left:0;right:0;height:1px}
+.msg.user .msg-bubble{background:var(--red);color:#fff;border-radius:12px 0 12px 12px;border:1px solid rgba(255,255,255,.08)}
+.msg-time{font-family:'DM Mono',monospace;font-size:.38rem;letter-spacing:.1em;text-transform:uppercase;color:var(--fog)}
+.msg.user .msg-time{text-align:right}
+
+/* Typing indicator */
+.typing-dots{display:flex;gap:4px;align-items:center;padding:.6rem .8rem;background:rgba(255,255,255,.04);border:1px solid var(--g-edge);border-radius:0 10px 10px 10px;width:fit-content}
+.typing-dots span{width:5px;height:5px;border-radius:50%;background:var(--mist);animation:dotBounce 1.2s ease infinite}
+.typing-dots span:nth-child(2){animation-delay:.18s}
+.typing-dots span:nth-child(3){animation-delay:.36s}
+@keyframes dotBounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+
+/* Quick replies */
+.quick-wrap{display:flex;flex-wrap:wrap;gap:.4rem;padding:.6rem 1.2rem;border-top:1px solid var(--border);background:rgba(0,0,0,.12);flex-shrink:0}
+.quick-btn{font-family:'DM Mono',monospace;font-size:.42rem;letter-spacing:.1em;text-transform:uppercase;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--mist);padding:.38rem .75rem;cursor:none;transition:background .25s,color .25s,border-color .25s;border-radius:0}
+.quick-btn:hover{background:rgba(196,30,30,.12);border-color:rgba(196,30,30,.35);color:var(--snow)}
+
+/* Chat input */
+.chat-input-row{display:flex;gap:0;border-top:1px solid var(--border);flex-shrink:0}
+#chat-input{flex:1;background:rgba(255,255,255,.025);border:none;border-right:1px solid var(--border);color:var(--snow);padding:.85rem 1rem;font-family:'Cormorant Garamond',serif;font-size:.95rem;outline:none;cursor:none;transition:background .25s}
+#chat-input::placeholder{color:var(--fog)}
+#chat-input:focus{background:rgba(255,255,255,.04)}
+#chat-send{background:var(--red);border:none;padding:.85rem 1.1rem;cursor:none;transition:background .25s;flex-shrink:0}
+#chat-send:hover{background:var(--red-hi)}
+#chat-send svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   RESPONSIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+@media(max-width:1200px){.plans-wrap{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:980px){
+  #about{grid-template-columns:1fr;gap:3rem}
+  .chart-body{grid-template-columns:1fr;gap:3rem}
+  .form-layout{grid-template-columns:1fr;gap:3rem}
+  .ft-top{grid-template-columns:1fr 1fr;gap:2.5rem}
+  .n-links{display:none}
+  .pay-grid{grid-template-columns:1fr}
+  .plans-wrap{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:640px){
+  .plans-wrap{grid-template-columns:1fr}
+  .h-stats{flex-direction:column;gap:1.2rem}
+  .h-stat{border-right:none;padding:0;margin:0;border-bottom:1px solid var(--border);padding-bottom:1rem}
+  .h-stat:last-child{border-bottom:none;padding-bottom:0}
+  .h-ctas{flex-direction:column}
+  .ft-top{grid-template-columns:1fr}
+  .fd-duo{flex-direction:column;gap:2rem}
+  .fd-sep{display:none}
+  .form-row{grid-template-columns:1fr}
+  #chat-panel{right:.8rem;left:.8rem;width:auto}
+}
+</style>
+</head>
+<body>
+
+<div id="grain" aria-hidden="true"></div>
+<div id="dot" aria-hidden="true"></div>
+<div id="ring" aria-hidden="true"></div>
+
+<!-- ═════════════════ LOADER ═════════════════ -->
+<div id="loader" role="status" aria-label="Loading Corvain Montclaire">
+  <div class="ld-mark" id="ldMark"></div>
+  <div class="ld-prog" id="ldProg"></div>
+  <p class="ld-sub">Elite Digital Architecture</p>
+</div>
+
+<!-- ═════════════════ NAV ═════════════════ -->
+<nav id="nav" aria-label="Main navigation">
+  <a href="#" class="n-logo" aria-label="Corvain Montclaire Home">
+    <svg viewBox="0 0 56 42" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M28 1L33 13L42 5L38 18H18L14 5L23 13L28 1Z"/>
+      <rect x="17" y="19" width="22" height="3" opacity=".55"/>
+      <text x="5" y="42" font-family="Georgia,serif" font-size="21" font-weight="900">C</text>
+      <text x="23" y="42" font-family="Georgia,serif" font-size="16" font-weight="700">M</text>
+    </svg>
+    CORVAIN MONTCLAIRE
+  </a>
+  <ul class="n-links" role="list">
+    <li><a href="#about">Studio</a></li>
+    <li><a href="#plans">Plans</a></li>
+    <li><a href="#payment">Payment</a></li>
+    <li><a href="#categories">Services</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#request">Contact</a></li>
+  </ul>
+  <button class="n-btn" onclick="scrollTo('plans')">Begin Project</button>
+</nav>
+
+<!-- ═════════════════ HERO ═════════════════ -->
+<section id="hero" aria-label="Hero">
+  <div class="h-orb1" aria-hidden="true"></div>
+  <div class="h-orb2" aria-hidden="true"></div>
+  <div class="h-grid" aria-hidden="true"></div>
+  <div class="h-vline" aria-hidden="true"></div>
+  <div class="h-scan" aria-hidden="true"></div>
+
+  <div class="h-content">
+    <p class="h-eyebrow">Website Builder · Business Manager · Financial Strategy</p>
+    <h1 class="h-title">
+      <span class="h-line"><em>BUILD</em></span>
+      <span class="h-line"><em>BEYOND</em></span>
+      <span class="h-line"><em>LIMITS.</em></span>
+    </h1>
+    <p class="h-desc">Corvain Montclaire engineers bespoke digital presences for businesses that demand perfection. Framework to full-stack — one house, zero compromise.</p>
+    <div class="h-ctas">
+      <button class="btn-p" onclick="scrollTo('plans')">Explore Plans</button>
+      <button class="btn-s" onclick="scrollTo('request')">Request a Website</button>
+    </div>
+    <div class="h-stats">
+      <div class="h-stat"><span class="sn" data-count="340" data-suffix="+">340+</span><span class="sl">Websites Delivered</span></div>
+      <div class="h-stat"><span class="sn" data-count="92" data-prefix="₹" data-suffix="L+">₹92L+</span><span class="sl">Client Revenue</span></div>
+      <div class="h-stat"><span class="sn" data-count="98" data-suffix="%">98%</span><span class="sl">Satisfaction Rate</span></div>
+      <div class="h-stat"><span class="sn">&lt;4h</span><span class="sl">Avg Response</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap" aria-hidden="true">
+  <div class="ticker-inner">
+    <span>Website Design</span><span class="acc">◆</span><span>Business Management</span><span class="acc">◆</span><span>Financial Strategy</span><span class="acc">◆</span><span>Domain Registration</span><span class="acc">◆</span><span>E-Commerce Solutions</span><span class="acc">◆</span><span>App Development</span><span class="acc">◆</span><span>SEO Optimization</span><span class="acc">◆</span><span>Brand Identity</span><span class="acc">◆</span>
+    <span>Website Design</span><span class="acc">◆</span><span>Business Management</span><span class="acc">◆</span><span>Financial Strategy</span><span class="acc">◆</span><span>Domain Registration</span><span class="acc">◆</span><span>E-Commerce Solutions</span><span class="acc">◆</span><span>App Development</span><span class="acc">◆</span><span>SEO Optimization</span><span class="acc">◆</span><span>Brand Identity</span><span class="acc">◆</span>
+  </div>
+</div>
+
+<!-- ═════════════════ ABOUT ═════════════════ -->
+<section id="about">
+  <div class="about-left" data-r="left">
+    <div class="s-eyebrow">What We Are</div>
+    <h2 class="s-title">Where Craft<br>Meets <em>Commerce.</em></h2>
+    <p class="about-q" style="margin-top:2.2rem"><strong>"We don't build websites.</strong> We engineer the <span class="red">digital storefronts</span> that redefine how the world perceives your business — and converts that perception into lasting revenue."</p>
+    <div class="about-pill"><p>Every project is personally reviewed and crafted. Never outsourced. Never templated.</p></div>
+  </div>
+  <div class="about-pts" data-r="right">
+    <div class="about-pt"><span class="pt-n">01</span><div class="pt-b"><h3>Bespoke Website Architecture</h3><p>Every pixel is intentional. We build websites that convert visitors into loyal customers — from framework to full deployment.</p></div></div>
+    <div class="about-pt"><span class="pt-n">02</span><div class="pt-b"><h3>Business Process Management</h3><p>Streamline operations, track finances, and manage growth with our tailored business management consulting.</p></div></div>
+    <div class="about-pt"><span class="pt-n">03</span><div class="pt-b"><h3>Financial Intelligence</h3><p>Smart money management for entrepreneurs — making every rupee work harder for measurable, compounding growth.</p></div></div>
+    <div class="about-pt"><span class="pt-n">04</span><div class="pt-b"><h3>End-to-End Digital Presence</h3><p>Domain, hosting, design, and launch — we handle the complete digital journey so you focus on what you do best.</p></div></div>
+  </div>
+</section>
+
+<!-- ═════════════════ BENEFITS ═════════════════ -->
+<section id="benefits">
+  <div class="s-eyebrow" data-r="up">Why Go Digital</div>
+  <h2 class="s-title" data-r="up">The Power of a<br>Professional <em>Web.</em></h2>
+  <div class="ben-grid" data-r="up" style="margin-top:4rem">
+    <div class="ben-card gl"><div class="ben-card-line"></div><span class="b-ico">🌐</span><h3>24/7 Global Reach</h3><p>Your website works around the clock, reaching customers across time zones while you sleep.</p></div>
+    <div class="ben-card gl"><div class="ben-card-line"></div><span class="b-ico">📈</span><h3>3× Revenue Growth</h3><p>Businesses with professional websites report an average 3× increase in qualified leads within 6 months.</p></div>
+    <div class="ben-card gl"><div class="ben-card-line"></div><span class="b-ico">🏆</span><h3>Instant Credibility</h3><p>75% of consumers judge a business's credibility by its website. Look the part. Win the trust.</p></div>
+    <div class="ben-card gl"><div class="ben-card-line"></div><span class="b-ico">🎯</span><h3>Precision Marketing</h3><p>Reach exactly who you want, when you want — with measurable ROI on every campaign you run.</p></div>
+    <div class="ben-card gl"><div class="ben-card-line"></div><span class="b-ico">💡</span><h3>Brand Differentiation</h3><p>Stand out in a saturated market. A bespoke digital presence signals what social profiles never can.</p></div>
+    <div class="ben-card gl"><div class="ben-card-line"></div><span class="b-ico">🔒</span><h3>Data & Insights</h3><p>Every visit and click is data — sharpening your strategy and amplifying every business decision.</p></div>
+    <div class="ben-card gl"><div class="ben-card-line"></div><span class="b-ico">🛒</span><h3>E-Commerce Revenue</h3><p>Unlock a new revenue stream — sell products or services 24/7 without overhead or limitations.</p></div>
+    <div class="ben-card gl"><div class="ben-card-line"></div><span class="b-ico">🤝</span><h3>Customer Retention</h3><p>Build lasting relationships through contact forms, WhatsApp integrations, and follow-up systems.</p></div>
+  </div>
+</section>
+
+<!-- ═════════════════ CHART ═════════════════ -->
+<section id="chart">
+  <div class="s-eyebrow" data-r="up">Performance Data</div>
+  <h2 class="s-title" data-r="up">Sales Uplift<br>by <em>Plan.</em></h2>
+  <p data-r="up" style="margin-top:1rem;max-width:44ch;font-size:.88rem;color:var(--fog);line-height:1.82">Projected increase in sales potential per plan, derived from verified client portfolio data across 340+ delivered websites.</p>
+  <div class="chart-body" data-r="up">
+    <div class="chart-bars" id="chartBars">
+      <div class="chart-baseline"></div>
+      <div class="bar-col"><span class="bar-pct">+35%</span><div class="bar-track"><div class="bar-fill bf1" data-h="32%"></div></div><span class="bar-lbl">Basic<br>₹1,200</span></div>
+      <div class="bar-col"><span class="bar-pct">+62%</span><div class="bar-track"><div class="bar-fill bf2" data-h="58%"></div></div><span class="bar-lbl">Zap Mode<br>₹1,699</span></div>
+      <div class="bar-col"><span class="bar-pct">+81%</span><div class="bar-track"><div class="bar-fill bf3" data-h="76%"></div></div><span class="bar-lbl">Co-Premium<br>₹3,029</span></div>
+      <div class="bar-col"><span class="bar-pct">+120%</span><div class="bar-track"><div class="bar-fill bf4" data-h="100%"></div></div><span class="bar-lbl">Vitor<br>₹4,999</span></div>
+      <div class="bar-col"><span class="bar-pct" style="color:var(--gold)">TBD</span><div class="bar-track"><div class="bar-fill bf5" data-h="82%"></div></div><span class="bar-lbl">Apex App<br>₹37,999</span></div>
+    </div>
+    <div class="chart-legend">
+      <div class="leg-row"><div class="leg-dot" style="background:rgba(255,255,255,.3)"></div><div class="leg-info"><div class="leg-name">Basic</div><div class="leg-sub">Foundation — structural framework only</div></div></div>
+      <div class="leg-row"><div class="leg-dot" style="background:var(--red)"></div><div class="leg-info"><div class="leg-name">Zap Mode</div><div class="leg-sub">Presentable, conversion-ready site</div></div></div>
+      <div class="leg-row"><div class="leg-dot" style="background:var(--red);box-shadow:0 0 8px var(--red-gl)"></div><div class="leg-info"><div class="leg-name">Co-Premium</div><div class="leg-sub">Full site + custom domain authority</div></div></div>
+      <div class="leg-row"><div class="leg-dot" style="background:#fff;box-shadow:0 0 8px rgba(255,255,255,.15)"></div><div class="leg-info"><div class="leg-name">Vitor</div><div class="leg-sub">Unlimited custom features + domain</div></div></div>
+      <div class="leg-row"><div class="leg-dot" style="background:var(--gold)"></div><div class="leg-info"><div class="leg-name">Apex App</div><div class="leg-sub">Play Store + App Store — coming soon</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════════ PLANS ═════════════════ -->
+<section id="plans">
+  <div class="s-eyebrow" data-r="up">Pricing</div>
+  <h2 class="s-title" data-r="up">Choose Your <em>Plan.</em></h2>
+  <div class="plans-wrap" data-r="up">
+    <div class="plan gl"><div class="p-name">BASIC</div><p class="p-tag">The foundation. Clean framework, your vision, zero noise.</p><div class="p-price"><span class="p-sym">₹</span><span class="p-num">1,200</span><span class="p-note">One-time · Project only</span></div><ul class="p-feats"><li>Static website framework</li><li>Mobile-responsive design</li><li>Up to 4 pages</li><li>Basic contact form</li><li>2 revision rounds</li><li>Delivery in 5–7 days</li></ul><button class="p-cta" onclick="choosePlan('Basic — ₹1,200')">Select Basic →</button></div>
+    <div class="plan gl"><div class="p-name">ZAP MODE</div><p class="p-tag">Speed meets style. Fully presentable, ready to convert.</p><div class="p-price"><span class="p-sym">₹</span><span class="p-num">1,699</span><span class="p-note">One-time · Project only</span></div><ul class="p-feats"><li>Fully designed website</li><li>Up to 8 pages</li><li>Custom animations & UX</li><li>WhatsApp & social integrations</li><li>SEO-ready architecture</li><li>4 revision rounds</li><li>Delivery in 7–10 days</li></ul><button class="p-cta" onclick="choosePlan('Zap Mode — ₹1,699')">Select Zap Mode →</button></div>
+    <div class="plan hot gl"><div class="p-badge hot">Most Popular</div><div class="p-name">CO-PREMIUM</div><p class="p-tag">Complete digital identity — website plus your own domain.</p><div class="p-price"><span class="p-sym">₹</span><span class="p-num">3,029</span><span class="p-note">One-time · Project + Domain</span></div><ul class="p-feats"><li>Premium site + custom domain</li><li>Up to 12 pages</li><li>E-commerce ready (optional)</li><li>Advanced animations & UX</li><li>Google Analytics setup</li><li>1-year domain registration</li><li>6 revision rounds</li><li>Delivery in 7–12 days</li></ul><button class="p-cta" onclick="choosePlan('Co-Premium — ₹3,029')">Select Co-Premium →</button></div>
+    <div class="plan gl"><div class="p-name">VITOR</div><p class="p-tag">Unlimited ambition. Any feature. Full domain. The very best.</p><div class="p-price"><span class="p-sym">₹</span><span class="p-num">4,999</span><span class="p-note">One-time · Project + Domain</span></div><ul class="p-feats"><li>Fully custom — any feature</li><li>Unlimited pages</li><li>Custom domain included</li><li>Full e-commerce & payments</li><li>Admin dashboard if needed</li><li>Unlimited revisions</li><li>Dedicated project manager</li><li>3-month post-launch support</li></ul><button class="p-cta" onclick="choosePlan('Vitor — ₹4,999')">Select Vitor →</button></div>
+    <div class="plan soon gl"><div class="p-badge cs">Coming Soon</div><div class="p-name">APEX APP</div><p class="p-tag">Play Store + App Store — the ultimate digital asset.</p><div class="p-price"><span class="p-sym">₹</span><span class="p-num">37,999</span><span class="p-note">One-time · App + Deployment</span></div><ul class="p-feats"><li>Custom Android & iOS app</li><li>Google Play Store publishing</li><li>Apple App Store publishing</li><li>Push notifications & analytics</li><li>Full admin panel</li><li>Complete UI/UX design</li><li>Domain + website included</li><li>3-month support</li></ul><button class="p-cta" disabled>Notify Me When Live</button></div>
+  </div>
+</section>
+
+<!-- ═════════════════ PAYMENT ═════════════════ -->
+<section id="payment">
+  <div class="s-eyebrow" data-r="up">Payment Options</div>
+  <h2 class="s-title" data-r="up">How to <em>Pay.</em></h2>
+  <div class="pay-grid" data-r="up">
+    <div class="pay-card avail gl"><span class="pay-ico">💵</span><h3>CASH ON DELIVERY</h3><p>Pay only upon project delivery. Review your completed website, approve it, then pay — we earn trust before we earn money.</p><div class="pay-tag live"><span class="pay-dot"></span>Available Now</div></div>
+    <div class="pay-card soon2 gl"><span class="pay-ico">💳</span><h3>ONLINE PAYMENT</h3><p>UPI, cards, and net banking — a seamless digital gateway is being configured for a faster, frictionless experience.</p><div class="pay-tag coming"><span class="pay-dot"></span>Coming Soon</div></div>
+  </div>
+</section>
+
+<!-- ═════════════════ CATEGORIES ═════════════════ -->
+<section id="categories">
+  <div class="s-eyebrow" data-r="up">Services</div>
+  <h2 class="s-title" data-r="up">Website <em>Categories.</em></h2>
+  <p data-r="up" style="margin-top:1rem;max-width:40ch;font-size:.88rem;color:var(--fog);line-height:1.82">Whatever your business type — we've built it, and we'll build yours better.</p>
+  <div class="cat-grid" data-r="up">
+    <div class="cat-item gl"><span class="c-ico">🛍️</span><h4>E-Commerce Store</h4><p>Cart, payments & catalogue</p></div>
+    <div class="cat-item gl"><span class="c-ico">🍽️</span><h4>Restaurant / Café</h4><p>Menu, reservations & ordering</p></div>
+    <div class="cat-item gl"><span class="c-ico">💼</span><h4>Corporate / Business</h4><p>Professional brand presence</p></div>
+    <div class="cat-item gl"><span class="c-ico">🎨</span><h4>Portfolio / Creative</h4><p>Showcase your work beautifully</p></div>
+    <div class="cat-item gl"><span class="c-ico">🏥</span><h4>Healthcare / Clinic</h4><p>Appointments & patient info</p></div>
+    <div class="cat-item gl"><span class="c-ico">🏫</span><h4>Education / Academy</h4><p>Courses, admissions & LMS</p></div>
+    <div class="cat-item gl"><span class="c-ico">🏠</span><h4>Real Estate</h4><p>Property listings & enquiry</p></div>
+    <div class="cat-item gl"><span class="c-ico">⚖️</span><h4>Law / Consulting</h4><p>Trust-first professional sites</p></div>
+    <div class="cat-item gl"><span class="c-ico">💇</span><h4>Salon / Spa</h4><p>Bookings, gallery & offers</p></div>
+    <div class="cat-item gl"><span class="c-ico">🚀</span><h4>Startup / SaaS</h4><p>Landing pages that convert</p></div>
+    <div class="cat-item gl"><span class="c-ico">📸</span><h4>Photography / Film</h4><p>Visual storytelling platforms</p></div>
+    <div class="cat-item gl"><span class="c-ico">✈️</span><h4>Travel / Tours</h4><p>Bookings & destination showcases</p></div>
+  </div>
+</section>
+
+<!-- ═════════════════ REQUEST FORM ═════════════════ -->
+<section id="request">
+  <div class="s-eyebrow" data-r="up">Get Started</div>
+  <h2 class="s-title" data-r="up">Request Your <em>Website.</em></h2>
+  <div class="form-layout">
+    <div class="form-info" data-r="left">
+      <h3>"Tell us about your vision and we'll craft it into reality."</h3>
+      <p style="margin-top:1rem">Fill in the form — we respond within 4 hours to begin your project. All requests are personally reviewed by our team.</p>
+      <div class="f-box" style="margin-top:1.5rem"><span class="f-lbl">Direct Contact</span><span class="f-val"><a href="mailto:namanrajpatna@gmail.com">namanrajpatna@gmail.com</a></span></div>
+      <div class="f-box" style="margin-top:.8rem"><span class="f-lbl">Response Time</span><span class="f-val">Under 4 hours</span></div>
+      <div class="f-box" style="margin-top:.8rem"><span class="f-lbl">Payment</span><span class="f-val">Cash on Delivery · Online Coming Soon</span></div>
+    </div>
+    <form class="form-wrap gl" id="reqForm" data-r="right" novalidate>
+      <div class="form-row">
+        <div class="field" id="fName"><label for="iName">Full Name <span class="req-star">*</span></label><input type="text" id="iName" placeholder="e.g. Rahul Sharma" autocomplete="name"><span class="err">Please enter your name</span></div>
+        <div class="field" id="fPhone"><label for="iPhone">WhatsApp Number <span class="req-star">*</span></label><input type="tel" id="iPhone" placeholder="+91 98765 43210" autocomplete="tel"><span class="err">Please enter your WhatsApp number</span></div>
+      </div>
+      <div class="field" id="fAddr"><label for="iAddr">Address / City <span class="req-star">*</span></label><input type="text" id="iAddr" placeholder="e.g. Mumbai, Maharashtra" autocomplete="address-level2"><span class="err">Please enter your city</span></div>
+      <div class="field" id="fPlan"><label for="iPlan">Select Your Plan <span class="req-star">*</span></label>
+        <select id="iPlan">
+          <option value="">— Choose a Plan —</option>
+          <option value="Basic — ₹1,200">Basic — ₹1,200</option>
+          <option value="Zap Mode — ₹1,699">Zap Mode — ₹1,699</option>
+          <option value="Co-Premium — ₹3,029">Co-Premium — ₹3,029</option>
+          <option value="Vitor — ₹4,999">Vitor — ₹4,999</option>
+          <option value="Apex App — ₹37,999 (Coming Soon)">Apex App — ₹37,999 (Coming Soon)</option>
+        </select>
+        <span class="err">Please select a plan</span>
+      </div>
+      <div class="field" id="fStyle"><label for="iStyle">Website Style / Category <span class="req-star">*</span></label><input type="text" id="iStyle" placeholder="e.g. Dark minimalist e-commerce, restaurant with booking"><span class="err">Please describe your style</span></div>
+      <div class="field"><label for="iExtra">Extra Features / Special Requests</label><textarea id="iExtra" placeholder="Any additional features, integrations, or notes…"></textarea></div>
+      <button type="submit" class="submit-btn">Send Request →</button>
+      <p class="form-note">All requests go directly to <a href="mailto:namanrajpatna@gmail.com">namanrajpatna@gmail.com</a></p>
+    </form>
+  </div>
+</section>
+
+<!-- ═════════════════ REVIEWS ═════════════════ -->
+<section id="reviews">
+  <div class="s-eyebrow" data-r="up">Testimonials</div>
+  <h2 class="s-title" data-r="up">What Our Clients <em>Say.</em></h2>
+  <div class="rev-grid" data-r="up">
+    <div class="rev gl"><div class="rev-stars">★★★★★</div><p class="rev-q">"Corvain Montclaire transformed our boutique's online presence overnight. Sales increased by 68% within two months. Absolutely elite work."</p><div class="rev-auth"><div class="rev-av">PR</div><div><div class="rev-name">Priya Rajkumar</div><div class="rev-role">Owner, The Silk Atelier</div></div></div></div>
+    <div class="rev gl"><div class="rev-stars">★★★★★</div><p class="rev-q">"The Vitor plan gave us a fully custom solution we couldn't find anywhere else at this price. Quality rivals agencies charging 10× more."</p><div class="rev-auth"><div class="rev-av">AM</div><div><div class="rev-name">Arjun Mehta</div><div class="rev-role">CEO, Nexus Consulting</div></div></div></div>
+    <div class="rev gl"><div class="rev-stars">★★★★★</div><p class="rev-q">"I requested a restaurant website on Co-Premium and was blown away. The design, booking system, the speed — pure perfection. Tables fully booked."</p><div class="rev-auth"><div class="rev-av">SK</div><div><div class="rev-name">Suresh Krishnamurthy</div><div class="rev-role">Owner, Spice Route Bistro</div></div></div></div>
+    <div class="rev gl"><div class="rev-stars">★★★★★</div><p class="rev-q">"My portfolio site attracted 3 major brand collaborations within weeks. The Zap Mode plan was worth every single rupee."</p><div class="rev-auth"><div class="rev-av">RD</div><div><div class="rev-name">Rhea Dubey</div><div class="rev-role">Freelance Photographer</div></div></div></div>
+    <div class="rev gl"><div class="rev-stars">★★★★★</div><p class="rev-q">"Our real estate portal handles hundreds of listings now. The team understood our vision immediately and delivered beyond all expectations."</p><div class="rev-auth"><div class="rev-av">VN</div><div><div class="rev-name">Vikram Nair</div><div class="rev-role">Director, Prime Properties</div></div></div></div>
+    <div class="rev gl"><div class="rev-stars">★★★★★</div><p class="rev-q">"Started with Basic, quality was so impressive I upgraded to Vitor the next week. Professional, punctual, and picture perfect every time."</p><div class="rev-auth"><div class="rev-av">ZK</div><div><div class="rev-name">Zara Khan</div><div class="rev-role">Founder, Bloom Wellness</div></div></div></div>
+  </div>
+</section>
+
+<!-- ═════════════════ SAMPLE ═════════════════ -->
+<section id="sample" style="text-align:center;overflow:hidden">
+  <div class="sample-orb" aria-hidden="true"></div>
+  <div class="sample-inner" data-r="up">
+    <div class="s-eyebrow" style="justify-content:center">Genuine Inquiry</div>
+    <h2 class="s-title" style="margin-bottom:1.5rem">Want to See<br>a Sample <em>First?</em></h2>
+    <p class="sample-q">"If you're serious about growing your business online, we're serious about showing you exactly how we can help — with a sample website tailored to your industry, completely free."</p>
+    <a class="sample-link gl" href="mailto:namanrajpatna@gmail.com?subject=Sample Website Request — Corvain Montclaire&body=Hello Corvain Montclaire,%0A%0AI would like to see a sample website for my business.%0A%0AMy business type: [describe here]%0AMy industry: [your industry]%0A%0AThank you.">Request a Free Sample →</a>
+  </div>
+</section>
+
+<!-- ═════════════════ FOUNDERS ═════════════════ -->
+<section id="founders" style="overflow:hidden">
+  <div class="fd-orb" aria-hidden="true"></div>
+  <div class="fd-inner" data-r="up">
+    <span class="fd-eyebrow">The Minds Behind Corvain Montclaire</span>
+    <div class="fd-duo">
+      <div class="fd-person"><span class="fd-role">Founder</span><div class="fd-name"><b>Lord</b> Naman</div></div>
+      <div class="fd-sep" aria-hidden="true"></div>
+      <div class="fd-person"><span class="fd-role">Co-Founder</span><div class="fd-name"><b>Aditya</b></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════════ FOOTER ═════════════════ -->
+<footer>
+  <div class="ft-top">
+    <div class="ft-brand">
+      <div class="ft-logo">
+        <svg viewBox="0 0 56 42" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M28 1L33 13L42 5L38 18H18L14 5L23 13L28 1Z" fill="currentColor"/>
+          <rect x="17" y="19" width="22" height="3" fill="currentColor" opacity=".5"/>
+          <text x="5" y="42" font-family="Georgia,serif" font-size="21" font-weight="900" fill="currentColor">C</text>
+          <text x="23" y="42" font-family="Georgia,serif" font-size="16" font-weight="700" fill="currentColor">M</text>
+        </svg>
+        CORVAIN MONTCLAIRE
+      </div>
+      <p class="ft-brand-desc">Elite digital architecture, business management, and financial strategy for the discerning entrepreneur.</p>
+    </div>
+    <div class="ft-col"><h4>Services</h4><ul><li><a href="#plans">Website Design</a></li><li><a href="#about">Business Management</a></li><li><a href="#about">Financial Strategy</a></li><li><a href="#categories">All Categories</a></li></ul></div>
+    <div class="ft-col"><h4>Plans</h4><ul><li><a href="#plans">Basic — ₹1,200</a></li><li><a href="#plans">Zap Mode — ₹1,699</a></li><li><a href="#plans">Co-Premium — ₹3,029</a></li><li><a href="#plans">Vitor — ₹4,999</a></li><li><a href="#plans">Apex App — ₹37,999</a></li></ul></div>
+    <div class="ft-col"><h4>Contact</h4><ul><li><a href="mailto:namanrajpatna@gmail.com">namanrajpatna@gmail.com</a></li><li><a href="#request">Request a Website</a></li><li><a href="#sample">Get a Free Sample</a></li><li><a href="#reviews">Client Reviews</a></li><li><a href="#founders">About Us</a></li></ul></div>
+  </div>
+  <div class="ft-bottom">
+    <p class="ft-copy">© 2025 Corvain Montclaire. All rights reserved.</p>
+    <p class="ft-cred">Designed by <strong>Lord Naman</strong></p>
+  </div>
+</footer>
+
+<!-- ═════════════════ TOAST ═════════════════ -->
+<div id="toast" role="alert" aria-live="polite">
+  <span class="t-ico">✅</span>
+  <div class="t-txt"><h4>REQUEST SENT</h4><p id="toastMsg">Your email client will open. We'll reply within 4 hours.</p></div>
+  <button class="t-close" onclick="hideToast()" aria-label="Dismiss">✕</button>
+</div>
+
+<!-- ═════════════════ CHATBOT ═════════════════ -->
+<button id="chat-fab" onclick="toggleChat()" aria-label="Open chat assistant" title="Chat with our assistant">
+  <span class="fab-tooltip">Chat with us</span>
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" id="fabIcon">
+    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+  </svg>
+</button>
+
+<div id="chat-panel" aria-label="Chat assistant" role="dialog">
+  <!-- Header -->
+  <div class="chat-head">
+    <div class="chat-av">
+      <svg viewBox="0 0 24 24"><path d="M12 2a5 5 0 015 5 5 5 0 01-5 5 5 5 0 01-5-5 5 5 0 015-5m0 12c5.33 0 8 2.67 8 4v2H4v-2c0-1.33 2.67-4 8-4z" stroke="#fff" fill="none"/></svg>
+    </div>
+    <div class="chat-head-info">
+      <span class="chat-name">CM Advisor</span>
+      <span class="chat-status">Online — Ready to help</span>
+    </div>
+    <button class="chat-close-btn" onclick="toggleChat()" aria-label="Close chat">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+
+  <!-- Messages -->
+  <div class="chat-messages" id="chatMsgs"></div>
+
+  <!-- Quick replies -->
+  <div class="quick-wrap" id="quickWrap"></div>
+
+  <!-- Input -->
+  <div class="chat-input-row">
+    <input type="text" id="chat-input" placeholder="Ask me anything…" autocomplete="off" onkeydown="if(event.key==='Enter')sendChat()">
+    <button id="chat-send" onclick="sendChat()" aria-label="Send message">
+      <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ═════════════════════════════════════════════
+     JAVASCRIPT — ALL FEATURES
+═════════════════════════════════════════════ -->
+<script>
+'use strict';
+
+/* ──────── CURSOR ──────── */
+const dot = document.getElementById('dot');
+const ring = document.getElementById('ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; dot.style.cssText = `left:${mx}px;top:${my}px`; }, { passive: true });
+(function trackRing() { rx += (mx - rx) * .11; ry += (my - ry) * .11; ring.style.cssText = `left:${rx}px;top:${ry}px`; requestAnimationFrame(trackRing); })();
+document.querySelectorAll('a,button,.plan,.cat-item,.ben-card,.rev,.pay-card').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('hov'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('hov'));
+});
+
+/* ──────── LOADER ──────── */
+(function () {
+  const mark = document.getElementById('ldMark');
+  const prog = document.getElementById('ldProg');
+  const loader = document.getElementById('loader');
+  'CORVAIN'.split('').forEach((c, i) => {
+    const s = document.createElement('span');
+    s.textContent = c; s.style.animationDelay = (i * .09) + 's';
+    mark.appendChild(s);
+  });
+  loader.classList.add('active');
+  setTimeout(() => prog.style.width = '210px', 300);
+  setTimeout(() => loader.classList.add('gone'), 2400);
+})();
+
+/* ──────── NAV ──────── */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('on', scrollY > 50), { passive: true });
+
+/* ──────── SMOOTH SCROLL ──────── */
+function scrollTo(id) { const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => { const t = document.querySelector(a.getAttribute('href')); if (t && a.getAttribute('href') !== '#') { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); } });
+});
+
+/* ──────── REVEAL ON SCROLL ──────── */
+const ro = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); ro.unobserve(e.target); } }), { threshold: .1, rootMargin: '0px 0px -55px 0px' });
+document.querySelectorAll('[data-r]').forEach(el => ro.observe(el));
+
+/* ──────── CHART BARS ──────── */
+let chartDone = false;
+new IntersectionObserver(entries => entries.forEach(e => {
+  if (e.isIntersecting && !chartDone) {
+    chartDone = true;
+    document.querySelectorAll('.bar-fill').forEach((b, i) => setTimeout(() => b.style.height = b.dataset.h, i * 90));
+  }
+}), { threshold: .25 }).observe(document.getElementById('chartBars'));
+
+/* ──────── PLAN SELECT ──────── */
+function choosePlan(val) {
+  const sel = document.getElementById('iPlan');
+  if (sel) { for (const o of sel.options) { if (o.value === val) { o.selected = true; break; } } }
+  scrollTo('request');
+}
+
+/* ──────── COUNTER ──────── */
+new IntersectionObserver(entries => entries.forEach(e => {
+  if (e.isIntersecting) {
+    e.target.querySelectorAll('.sn[data-count]').forEach((el, i) => {
+      const target = +el.dataset.count;
+      const prefix = el.dataset.prefix || '';
+      const suffix = el.dataset.suffix || '';
+      setTimeout(() => {
+        const start = performance.now();
+        (function tick(now) {
+          const p = Math.min((now - start) / 1600, 1);
+          const v = Math.floor(target * (1 - Math.pow(1 - p, 3)));
+          el.textContent = prefix + v + suffix;
+          if (p < 1) requestAnimationFrame(tick);
+          else el.textContent = prefix + target + suffix;
+        })(start);
+      }, i * 110);
+    });
+    e.target.querySelectorAll('.sn[data-count]').forEach(el => {
+      el.removeAttribute('data-count');
+    });
+  }
+}), { threshold: .5 }).observe(document.querySelector('.h-stats'));
+
+/* ──────── PARALLAX ORBS ──────── */
+document.addEventListener('mousemove', e => {
+  const dx = (e.clientX / window.innerWidth - .5) * 2;
+  const dy = (e.clientY / window.innerHeight - .5) * 2;
+  document.querySelector('.h-orb1').style.transform = `translate(${dx * 20}px,${dy * 20}px)`;
+  document.querySelector('.h-orb2').style.transform = `translate(${dx * -14}px,${dy * -14}px)`;
+}, { passive: true });
+
+/* ──────── FORM ──────── */
+const REQUIRED_FIELDS = [
+  { inputId: 'iName',  parentId: 'fName',  msg: 'Please enter your name' },
+  { inputId: 'iPhone', parentId: 'fPhone', msg: 'Please enter your WhatsApp number' },
+  { inputId: 'iAddr',  parentId: 'fAddr',  msg: 'Please enter your city' },
+  { inputId: 'iPlan',  parentId: 'fPlan',  msg: 'Please select a plan' },
+  { inputId: 'iStyle', parentId: 'fStyle', msg: 'Please describe your style' },
+];
+
+function validateField(inputId, parentId) {
+  const inp = document.getElementById(inputId);
+  const par = document.getElementById(parentId);
+  const ok = inp && inp.value.trim() !== '';
+  par.classList.toggle('bad', !ok);
+  if (inp) inp.classList.toggle('bad', !ok);
+  return ok;
+}
+
+REQUIRED_FIELDS.forEach(({ inputId, parentId }) => {
+  const el = document.getElementById(inputId);
+  if (!el) return;
+  el.addEventListener('blur', () => validateField(inputId, parentId));
+  el.addEventListener('input', () => { if (el.value.trim()) { document.getElementById(parentId).classList.remove('bad'); el.classList.remove('bad'); } });
+});
+
+document.getElementById('reqForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+  const valid = REQUIRED_FIELDS.map(f => validateField(f.inputId, f.parentId));
+  if (valid.includes(false)) {
+    const firstBad = this.querySelector('.bad');
+    if (firstBad) firstBad.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  const name  = document.getElementById('iName').value.trim();
+  const phone = document.getElementById('iPhone').value.trim();
+  const addr  = document.getElementById('iAddr').value.trim();
+  const plan  = document.getElementById('iPlan').value;
+  const style = document.getElementById('iStyle').value.trim();
+  const extra = document.getElementById('iExtra').value.trim();
+
+  const sub  = encodeURIComponent(`Website Request — ${plan} — ${name}`);
+  const body = encodeURIComponent(
+    `CORVAIN MONTCLAIRE — WEBSITE REQUEST\n` +
+    `${'━'.repeat(40)}\n\n` +
+    `Name        : ${name}\n` +
+    `WhatsApp    : ${phone}\n` +
+    `Address     : ${addr}\n` +
+    `Plan        : ${plan}\n` +
+    `Style       : ${style}\n` +
+    `Extra Notes : ${extra || 'None'}\n\n` +
+    `${'─'.repeat(40)}\n` +
+    `Submitted via corvainmontclaire.com`
+  );
+  window.location.href = `mailto:namanrajpatna@gmail.com?subject=${sub}&body=${body}`;
+  setTimeout(() => showToast('Request prepared! Please send the email that opens in your mail app.'), 500);
+  this.reset();
+  REQUIRED_FIELDS.forEach(({ parentId }) => document.getElementById(parentId).classList.remove('bad'));
+});
+
+/* ──────── TOAST ──────── */
+let toastTimer;
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg || 'Done!';
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(hideToast, 7000);
+}
+function hideToast() { document.getElementById('toast').classList.remove('show'); }
+
+/* ══════════════════════════════════════
+   CHATBOT — SMART ADVISOR
+══════════════════════════════════════ */
+let chatOpen = false;
+let chatHistory = [];
+let quickReplies = [];
+
+function toggleChat() {
+  chatOpen = !chatOpen;
+  const panel = document.getElementById('chat-panel');
+  const fab = document.getElementById('chat-fab');
+  panel.classList.toggle('open', chatOpen);
+  fab.classList.toggle('open', chatOpen);
+  if (chatOpen && chatHistory.length === 0) initChat();
+  if (chatOpen) setTimeout(() => document.getElementById('chat-input').focus(), 400);
+}
+
+function initChat() {
+  const msgs = document.getElementById('chatMsgs');
+  msgs.innerHTML = '';
+  chatHistory = [];
+  const greeting = "Hello! I'm your Corvain Montclaire advisor. I'm here to help you choose the perfect plan, answer any questions, and guide you toward building your ideal website. What can I help you with today?";
+  appendMsg('bot', greeting, now());
+  setQuick(['View our plans', 'Which plan is right for me?', 'How much does it cost?', 'Get a free sample']);
+}
+
+function setQuick(options) {
+  quickReplies = options;
+  const wrap = document.getElementById('quickWrap');
+  wrap.innerHTML = '';
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'quick-btn';
+    btn.textContent = opt;
+    btn.onclick = () => { document.getElementById('chat-input').value = opt; sendChat(); };
+    wrap.appendChild(btn);
+  });
+}
+
+function appendMsg(role, text, time) {
+  const msgs = document.getElementById('chatMsgs');
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  div.innerHTML = `<div class="msg-bubble">${text.replace(/\n/g,'<br>')}</div><span class="msg-time">${time}</span>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function showTyping() {
+  const msgs = document.getElementById('chatMsgs');
+  const td = document.createElement('div');
+  td.id = 'typingDiv';
+  td.className = 'msg bot';
+  td.innerHTML = `<div class="typing-dots"><span></span><span></span><span></span></div>`;
+  msgs.appendChild(td);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function hideTyping() {
+  const td = document.getElementById('typingDiv');
+  if (td) td.remove();
+}
+
+function now() {
+  return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+function sendChat() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  document.getElementById('quickWrap').innerHTML = '';
+
+  appendMsg('user', text, now());
+  chatHistory.push({ role: 'user', content: text });
+
+  showTyping();
+
+  setTimeout(() => {
+    hideTyping();
+    const fallback = getFallback(text);
+    chatHistory.push({ role: 'assistant', content: fallback.msg });
+    appendMsg('bot', fallback.msg, now());
+    setQuick(fallback.quick);
+  }, 900);
+}
+
+function getFallback(text) {
+  const t = text.toLowerCase();
+  if (t.includes('plan') || t.includes('price') || t.includes('cost') || t.includes('rupee') || t.includes('₹')) {
+    return { msg: "We have 4 main plans: Basic (₹1,200), Zap Mode (₹1,699), Co-Premium (₹3,029 + domain), and Vitor (₹4,999 + domain, unlimited features). Which sounds closest to what you need?", quick: ['Tell me about Basic', 'Tell me about Vitor', 'Which plan suits a restaurant?', 'I need e-commerce'] };
+  }
+  if (t.includes('basic')) return { msg: "The Basic plan (₹1,200) gives you a clean, mobile-responsive website framework — perfect to establish your online presence. It includes up to 4 pages, a contact form, and 2 revision rounds. Delivered in 5–7 days.", quick: ['How is Zap Mode different?', 'Can I upgrade later?', 'I want to start with Basic', 'What about e-commerce?'] };
+  if (t.includes('zap')) return { msg: "Zap Mode (₹1,699) is a fully designed, presentable website with animations, WhatsApp integration, SEO structure, and up to 8 pages. It's the fastest way to launch something that truly impresses. Delivered in 7–10 days.", quick: ['Compare with Co-Premium', 'Does it include a domain?', 'I want Zap Mode', 'Show me plans'] };
+  if (t.includes('co-premium') || t.includes('copremium') || t.includes('premium')) return { msg: "Co-Premium (₹3,029) is our most popular plan — it includes everything in Zap Mode plus a custom domain (1 year), e-commerce option, advanced UX, and 6 revisions. This is the sweet spot for businesses serious about their online presence.", quick: ['Add e-commerce?', 'What domain can I get?', 'I want Co-Premium', 'Tell me about Vitor'] };
+  if (t.includes('vitor')) return { msg: "Vitor (₹4,999) is our flagship — any feature, unlimited pages, custom domain, full e-commerce, admin dashboard, unlimited revisions, and 3 months of post-launch support. If you want the best, this is it.", quick: ['What features can I request?', 'I want Vitor', 'Compare all plans', 'Get a free sample'] };
+  if (t.includes('app') || t.includes('apex')) return { msg: "Our Apex App plan (₹37,999) is coming soon — it includes a custom Android & iOS app published on both Play Store and App Store, push notifications, admin panel, and a website + domain. A complete digital empire for your business.", quick: ['When will it launch?', 'Tell me about website plans', 'View all plans', 'Contact the team'] };
+  if (t.includes('sample') || t.includes('example')) return { msg: "Absolutely! You can request a free sample website tailored to your business by emailing namanrajpatna@gmail.com with your industry and style. Our team will put together something to show you exactly what we can deliver.", quick: ['Email for a sample', 'What plans include domain?', 'View our plans', 'Submit a request'] };
+  if (t.includes('domain')) return { msg: "Custom domains are included in our Co-Premium (₹3,029) and Vitor (₹4,999) plans. We handle the registration and setup — you just tell us your preferred domain name and we'll sort everything out.", quick: ['Tell me about Co-Premium', 'Tell me about Vitor', 'View all plans', 'Submit a request'] };
+  if (t.includes('ecommerce') || t.includes('e-commerce') || t.includes('shop') || t.includes('store')) return { msg: "E-commerce functionality is available on our Co-Premium and Vitor plans. This includes product catalogues, cart, and payment integration. If you want a full-featured store, I'd recommend the Vitor plan for unlimited customisation.", quick: ['Tell me about Vitor', 'Tell me about Co-Premium', 'What payment gateways?', 'Submit a request'] };
+  if (t.includes('contact') || t.includes('email') || t.includes('reach')) return { msg: "You can reach us directly at namanrajpatna@gmail.com — we respond within 4 hours. You can also fill out the request form on this page and we'll get back to you on WhatsApp.", quick: ['Fill request form', 'View plans first', 'Get a free sample', 'What plans do you have?'] };
+  if (t.includes('restaurant') || t.includes('cafe') || t.includes('food')) return { msg: "For a restaurant or café, I'd recommend the Co-Premium plan (₹3,029). You get a fully designed site with online menu, booking system, your own domain, and all the animations to make your food look irresistible.", quick: ['Tell me about Co-Premium', 'Can I add online ordering?', 'I want to start', 'View all plans'] };
+  return { msg: "Great question! I'd be happy to help guide you. To point you in the right direction — are you looking for a basic online presence, a fully designed website, or a complete solution with e-commerce and a domain?", quick: ['Just a basic website', 'Full featured website', 'I need e-commerce too', 'What are your prices?'] };
+}
+
+// Close chat on outside click
+document.addEventListener('click', e => {
+  const panel = document.getElementById('chat-panel');
+  const fab = document.getElementById('chat-fab');
+  if (chatOpen && !panel.contains(e.target) && !fab.contains(e.target)) toggleChat();
+});
+</script>
+</body>
+</html>
